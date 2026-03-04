@@ -1,2 +1,7 @@
 #alle .env files
 .env
+
+
+#mqtt broker data/ logs
+mqtt-broker/data
+mqtt-broker/log
