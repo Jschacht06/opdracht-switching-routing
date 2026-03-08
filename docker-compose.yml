@@ -10,6 +10,12 @@ services:
       - ./mqtt-broker/config:/mosquitto/config
       - ./mqtt-broker/data:/mosquitto/data
       - ./mqtt-broker/log:/mosquitto/log
+  sensors:
+    image: sensors
+    container_name: sensors-simulator
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
   portainer:
     container_name: portainer
     image: portainer/portainer-ce:sts

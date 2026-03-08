@@ -2,7 +2,7 @@ import json, random, time
 import paho.mqtt.client as mqtt
 
 
-BROKER = "localhost" #moet internal docker ip worden
+BROKER = "mosquitto" #moet internal docker ip worden
 PORT = 1883
 TOPIC_BATHROOM = "/home/sensors/bathroom"
 TOPIC_BEDROOM = "/home/sensors/bedroom"
