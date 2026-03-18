@@ -25,11 +25,21 @@ services:
       - portainer_data:/data
     ports:
       - 9443:9443
+  node-red:
+    image: nodered/node-red:latest
+    environment:
+      - TZ=Europe/Amsterdam
+    ports:
+      - "1880:1880"
+    volumes:
+      - node-red-data:/data
 
 
 volumes:
   portainer_data:
     name: portainer_data
+  node-red-data:
+    name: node_red_data
 
 
 networks:
