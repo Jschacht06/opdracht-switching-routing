@@ -38,6 +38,21 @@
         "sessionExpiry": ""
     },
     {
+        "id": "0401f53244209c86",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": 8086,
+        "protocol": "http",
+        "database": "database",
+        "name": "InfluxDB",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://localhost:8086",
+        "timeout": 10,
+        "rejectUnauthorized": true
+    },
+    {
         "id": "09359b25339045b2",
         "type": "mqtt in",
         "z": "f6f2187d.f17ca8",
@@ -50,8 +65,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 180,
-        "y": 40,
+        "x": 120,
+        "y": 220,
         "wires": [
             [
                 "2f07d6e49802024c"
@@ -71,8 +86,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 180,
-        "y": 120,
+        "x": 120,
+        "y": 300,
         "wires": [
             [
                 "2f07d6e49802024c"
@@ -92,8 +107,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 190,
-        "y": 200,
+        "x": 130,
+        "y": 380,
         "wires": [
             [
                 "2f07d6e49802024c"
@@ -112,8 +127,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 490,
-        "y": 120,
+        "x": 410,
+        "y": 300,
         "wires": [
             [
                 "f54d8f532aa1ace7"
@@ -133,8 +148,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1010,
-        "y": 120,
+        "x": 1190,
+        "y": 260,
         "wires": []
     },
     {
@@ -142,18 +157,57 @@
         "type": "function",
         "z": "f6f2187d.f17ca8",
         "name": "bad value check",
-        "func": "let t = msg.payload.temperature;\nlet h = msg.payload.humidity;\n\nlet errors = [];\n\nif (msg.topic === \"/home/sensors/bathroom\") {\n    if (t < 16.5 || t > 29.5) errors.push(\"temperature out of range\");\n    if (h < 50 || h > 85) errors.push(\"humidity out of range\");\n}\n\nif (msg.topic === \"/home/sensors/bedroom\") {\n    if (t < 9.0 || t > 24.5) errors.push(\"temperature out of range\");\n    if (h < 40 || h > 55) errors.push(\"humidity out of range\");\n}\n\nif (msg.topic === \"/home/sensors/server_room\") {\n    if (t < 22 || t > 47) errors.push(\"temperature out of range\");\n    if (h < 30 || h > 45) errors.push(\"humidity out of range\");\n}\n\nmsg.payload.error = errors.length > 0;\nmsg.payload.error_messages = errors;\nmsg.payload.temperature_status = errors.includes(\"temperature out of range\") ? \"ERROR\" : \"OK\";\nmsg.payload.humidity_status = errors.includes(\"humidity out of range\") ? \"ERROR\" : \"OK\";\n\nreturn msg;",
+        "func": "let t = msg.payload.temperature;\nlet h = msg.payload.humidity;\n\nlet error = false;\n\nif (msg.topic === \"/home/sensors/bathroom\") {\n    if (t < 16.5 || t > 29.5 || h < 50 || h > 85) {\n        error = true;\n    }\n}\n\nif (msg.topic === \"/home/sensors/bedroom\") {\n    if (t < 9.0 || t > 24.5 || h < 40 || h > 55) {\n        error = true;\n    }\n}\n\nif (msg.topic === \"/home/sensors/server_room\") {\n    if (t < 22 || t > 47 || h < 30 || h > 45) {\n        error = true;\n    }\n}\n\nmsg.payload.error = error;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 760,
-        "y": 120,
+        "x": 660,
+        "y": 300,
         "wires": [
             [
-                "33bbaef84939b24e"
+                "b708488c9a558e06"
+            ]
+        ]
+    },
+    {
+        "id": "5b4c79f42a0b94c7",
+        "type": "influxdb out",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "0401f53244209c86",
+        "name": "InfluxDB data",
+        "measurement": "sensordata",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "Vives",
+        "bucket": "sensordata",
+        "x": 1180,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "b708488c9a558e06",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "data formatting for InfluxDB",
+        "func": "let room = msg.topic.split(\"/\").pop();\n\nmsg.payload = [\n    {\n        temperature: msg.payload.temperature,\n        humidity: msg.payload.humidity,\n        error_count: msg.payload.error ? 1 : 0\n    },\n    {\n        room: room\n    }\n];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 300,
+        "wires": [
+            [
+                "33bbaef84939b24e",
+                "5b4c79f42a0b94c7"
             ]
         ]
     }

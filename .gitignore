@@ -5,7 +5,12 @@
 mqtt-broker/data
 mqtt-broker/log
 
-# Node-Red data
-node-red-data/.config.*
-node-red-data/context/
-node-red-data/*_cred.json
+# Node-RED data
+node-red-data/*
+
+!node-red-data/flows.json
+!node-red-data/package.json
+!node-red-data/settings.js
+
+# InfluxDB data
+influxdb/data
