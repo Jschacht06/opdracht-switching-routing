@@ -1,7 +1,10 @@
-#alle .env files
+# All .env files
 .env
 
-
-#mqtt broker data/ logs
+# MQTT broker data/ logs
 mqtt-broker/data
 mqtt-broker/log
+
+# Node-Red data
+node-red-data/.config.*
+node-red-data/context/

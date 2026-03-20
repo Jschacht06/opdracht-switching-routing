@@ -27,12 +27,14 @@ services:
       - 9443:9443
   node-red:
     image: nodered/node-red:4.1
+    container_name: node-red
+    restart: unless-stopped
     environment:
       - TZ=Europe/Amsterdam
     ports:
       - "1880:1880"
     volumes:
-      - node-red-data:/data
+      - ./node-red-data:/data
   influxdb:
     image: influxdb:2.7
     container_name: influxdb
