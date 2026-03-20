@@ -8,3 +8,4 @@ mqtt-broker/log
 # Node-Red data
 node-red-data/.config.*
 node-red-data/context/
+node-red-data/*_cred.json
