@@ -11,6 +11,9 @@ services:
       - ./mqtt-broker/data:/mosquitto/data
       - ./mqtt-broker/log:/mosquitto/log
   sensors:
+    build:
+      context: ./sensors
+      dockerfile: Dockerfile
     image: sensors
     container_name: sensors-simulator
     restart: unless-stopped
