@@ -12,6 +12,7 @@ node-red-data/*
 !node-red-data/package.json
 !node-red-data/package-lock.json
 !node-red-data/settings.js
+!node-red-data/Dockerfile
 
 # InfluxDB data
 influxdb/data

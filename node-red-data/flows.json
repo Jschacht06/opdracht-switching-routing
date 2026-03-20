@@ -69,7 +69,8 @@
         "y": 220,
         "wires": [
             [
-                "2f07d6e49802024c"
+                "2f07d6e49802024c",
+                "fcbd0887259f9d6c"
             ]
         ]
     },
@@ -131,7 +132,8 @@
         "y": 300,
         "wires": [
             [
-                "f54d8f532aa1ace7"
+                "f54d8f532aa1ace7",
+                "fae5ee1d39925cf7"
             ]
         ]
     },
@@ -139,7 +141,7 @@
         "id": "33bbaef84939b24e",
         "type": "debug",
         "z": "f6f2187d.f17ca8",
-        "name": "conversion debug",
+        "name": "data formatting debug",
         "active": false,
         "tosidebar": true,
         "console": false,
@@ -148,7 +150,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1190,
+        "x": 1200,
         "y": 260,
         "wires": []
     },
@@ -168,7 +170,8 @@
         "y": 300,
         "wires": [
             [
-                "b708488c9a558e06"
+                "b708488c9a558e06",
+                "098b76733946690b"
             ]
         ]
     },
@@ -198,7 +201,7 @@
         "type": "influxdb out",
         "z": "f6f2187d.f17ca8",
         "influxdb": "0401f53244209c86",
-        "name": "InfluxDB data",
+        "name": "InfluxDB data out",
         "measurement": "sensordata",
         "precision": "",
         "retentionPolicy": "",
@@ -207,8 +210,59 @@
         "retentionPolicyV18Flux": "",
         "org": "Vives",
         "bucket": "sensordata",
-        "x": 1180,
+        "x": 1190,
         "y": 340,
+        "wires": []
+    },
+    {
+        "id": "098b76733946690b",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "bad value debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 890,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "fae5ee1d39925cf7",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "conversion debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "fcbd0887259f9d6c",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "MQTT input debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 370,
+        "y": 180,
         "wires": []
     }
 ]

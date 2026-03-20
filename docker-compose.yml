@@ -25,16 +25,19 @@ services:
       - portainer_data:/data
     ports:
       - 9443:9443
-  node-red:
-    image: nodered/node-red:4.1
+  nodered:
     container_name: node-red
     restart: unless-stopped
-    environment:
-      - TZ=Europe/Amsterdam
+    build:
+      context: .
+      dockerfile: node-red-data/Dockerfile
     ports:
       - "1880:1880"
     volumes:
       - ./node-red-data:/data
+    depends_on:
+      - mosquitto
+      - influxdb
   influxdb:
     image: influxdb:2.7
     container_name: influxdb
