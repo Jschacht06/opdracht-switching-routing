@@ -173,24 +173,6 @@
         ]
     },
     {
-        "id": "5b4c79f42a0b94c7",
-        "type": "influxdb out",
-        "z": "f6f2187d.f17ca8",
-        "influxdb": "0401f53244209c86",
-        "name": "InfluxDB data",
-        "measurement": "sensordata",
-        "precision": "",
-        "retentionPolicy": "",
-        "database": "database",
-        "precisionV18FluxV20": "ms",
-        "retentionPolicyV18Flux": "",
-        "org": "Vives",
-        "bucket": "sensordata",
-        "x": 1180,
-        "y": 340,
-        "wires": []
-    },
-    {
         "id": "b708488c9a558e06",
         "type": "function",
         "z": "f6f2187d.f17ca8",
@@ -210,5 +192,23 @@
                 "5b4c79f42a0b94c7"
             ]
         ]
+    },
+    {
+        "id": "5b4c79f42a0b94c7",
+        "type": "influxdb out",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "0401f53244209c86",
+        "name": "InfluxDB data",
+        "measurement": "sensordata",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "Vives",
+        "bucket": "sensordata",
+        "x": 1180,
+        "y": 340,
+        "wires": []
     }
 ]
