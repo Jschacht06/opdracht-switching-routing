@@ -35,6 +35,11 @@ services:
       - "1880:1880"
     volumes:
       - ./node-red-data:/data
+    environment:
+      INFLUXDB_ORG: ${INFLUXDB_ORG}
+      INFLUXDB_BUCKET: ${INFLUXDB_BUCKET}
+      INFLUXDB_ADMIN_TOKEN: ${INFLUXDB_ADMIN_TOKEN}
+      INFLUXDB_URL: ${INFLUXDB_URL}
     depends_on:
       - mosquitto
       - influxdb

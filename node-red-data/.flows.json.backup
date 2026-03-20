@@ -69,7 +69,8 @@
         "y": 220,
         "wires": [
             [
-                "2f07d6e49802024c"
+                "2f07d6e49802024c",
+                "fcbd0887259f9d6c"
             ]
         ]
     },
@@ -245,6 +246,23 @@
         "statusType": "auto",
         "x": 650,
         "y": 240,
+        "wires": []
+    },
+    {
+        "id": "fcbd0887259f9d6c",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "MQTT input debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 370,
+        "y": 180,
         "wires": []
     }
 ]

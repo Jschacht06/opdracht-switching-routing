@@ -48,7 +48,7 @@
         "usetls": false,
         "tls": "",
         "influxdbVersion": "2.0",
-        "url": "http://influxdb:8086",
+        "url": "${INFLUXDB_URL}",
         "timeout": 10,
         "rejectUnauthorized": true
     },
@@ -208,8 +208,8 @@
         "database": "database",
         "precisionV18FluxV20": "ms",
         "retentionPolicyV18Flux": "",
-        "org": "Vives",
-        "bucket": "sensordata",
+        "org": "${INFLUXDB_ORG}",
+        "bucket": "${INFLUXDB_BUCKET}",
         "x": 1190,
         "y": 340,
         "wires": []
