@@ -1,8 +1,11 @@
 # TO DO
 - Influxdb dashboard/graph for node red data
-- documentation on truenas install + pool layout + nfs share
-- documentation on adding share to proxmox
+- CI/CD
 - documentation on debian vm setup
+- documentation on node-red setup
+- documentation on sensor script
+- documentation on influxdb
+- documentation on mqtt broker
 
 # opdracht-switching-routing
 
