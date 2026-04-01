@@ -1,0 +1,1 @@
+truneas install hoeft niet gedocumenteerd te worden, wel hoe de pool in elkaar zit met vdevs, de nfs share en hoe de drives passthrough werkt in proxmox
