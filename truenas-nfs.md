@@ -17,7 +17,7 @@ To be able to use the drives from the two JBODs that are connected to two of our
 
 Here's how to add it in Proxmox:
 1. Figure out which PCI card you need to select for passthrough. We used `lspci -nn` to view the connected PCI devices. In the output, we saw that `01:00.0` and `0a:00.0` were RAID controllers. After some searching around, we found out that the card with the JBODs connected was `0a:00.0`.
-2. We're using a cluster, so to add it, click on the Datacenter and open the Resource Mappings tab near the bottom.
+2. We're using a cluster, so to add it, click on the cluster and open the Resource Mappings tab near the bottom.
 3. Click on Add and select the device you want to add (`0a:00.0` in this case) from the list.
 4. Give it a name. This is the name for the device. We chose 'JBOD-connections'.
 5. Leave the other settings at their default values and click Create. The PCI card should now show up with your chosen name.
@@ -74,7 +74,7 @@ To add the network share, do this:
 You can add the NFS share as storage in Proxmox. In our case, we use that share as storage for our other VMs.
 
 Follow these steps to add the share:
-1. In Proxmox, select the Datacenter and click on Storage.
+1. In Proxmox, select the cluster and click on Storage.
 2. Click on Add and select NFS.
 3. Give it an ID. This will be the name for the storage, like 'local-zfs'.
 4. Add the IP address of your TrueNAS server to the Server section and put the full share path into the Export box. You can copy the share path from the TrueNAS UI under Shares.
