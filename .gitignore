@@ -15,4 +15,5 @@ node-red-data/*
 !node-red-data/Dockerfile
 
 # InfluxDB data
-influxdb/data
+influxdb/data/
+influxdb/config/
