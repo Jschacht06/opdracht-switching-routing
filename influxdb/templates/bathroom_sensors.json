@@ -1,0 +1,232 @@
+[
+    {
+        "apiVersion": "influxdata.com/v2alpha1",
+        "kind": "Dashboard",
+        "metadata": {
+            "name": "angry-franklin-363001"
+        },
+        "spec": {
+            "charts": [
+                {
+                    "axes": [
+                        {
+                            "base": "10",
+                            "name": "x",
+                            "scale": "linear"
+                        },
+                        {
+                            "base": "10",
+                            "name": "y",
+                            "scale": "linear"
+                        }
+                    ],
+                    "colorizeRows": true,
+                    "colors": [
+                        {
+                            "id": "JWP-lBqrD4m70Lxt381qc",
+                            "name": "Nineteen Eighty Four",
+                            "type": "scale",
+                            "hex": "#31C0F6"
+                        },
+                        {
+                            "id": "RC1EQU_js4LuQJnFH6kGK",
+                            "name": "Nineteen Eighty Four",
+                            "type": "scale",
+                            "hex": "#A500A5"
+                        },
+                        {
+                            "id": "PSBCrKGU9tX7_kJNtXdsR",
+                            "name": "Nineteen Eighty Four",
+                            "type": "scale",
+                            "hex": "#FF7E27"
+                        }
+                    ],
+                    "geom": "line",
+                    "height": 4,
+                    "hoverDimension": "auto",
+                    "kind": "Xy",
+                    "legendColorizeRows": true,
+                    "legendOpacity": 1,
+                    "legendOrientationThreshold": 100000000,
+                    "name": "Live temperature",
+                    "opacity": 1,
+                    "orientationThreshold": 100000000,
+                    "position": "overlaid",
+                    "queries": [
+                        {
+                            "query": "from(bucket: \"sensordata\")\r\n  |> range(start: -15m)\r\n  |> filter(fn: (r) => r._measurement == \"sensordata\")\r\n  |> filter(fn: (r) => r._field == \"temperature\")\r\n  |> filter(fn: (r) => r.room == \"bathroom\")"
+                        }
+                    ],
+                    "staticLegend": {
+                        "colorizeRows": true,
+                        "opacity": 1,
+                        "orientationThreshold": 100000000,
+                        "widthRatio": 1
+                    },
+                    "width": 4,
+                    "widthRatio": 1,
+                    "xCol": "_time",
+                    "yCol": "_value"
+                },
+                {
+                    "axes": [
+                        {
+                            "base": "10",
+                            "name": "x",
+                            "scale": "linear"
+                        },
+                        {
+                            "base": "10",
+                            "name": "y",
+                            "scale": "linear"
+                        }
+                    ],
+                    "colorizeRows": true,
+                    "colors": [
+                        {
+                            "id": "JWP-lBqrD4m70Lxt381qc",
+                            "name": "Nineteen Eighty Four",
+                            "type": "scale",
+                            "hex": "#31C0F6"
+                        },
+                        {
+                            "id": "RC1EQU_js4LuQJnFH6kGK",
+                            "name": "Nineteen Eighty Four",
+                            "type": "scale",
+                            "hex": "#A500A5"
+                        },
+                        {
+                            "id": "PSBCrKGU9tX7_kJNtXdsR",
+                            "name": "Nineteen Eighty Four",
+                            "type": "scale",
+                            "hex": "#FF7E27"
+                        }
+                    ],
+                    "geom": "line",
+                    "height": 4,
+                    "hoverDimension": "auto",
+                    "kind": "Xy",
+                    "legendColorizeRows": true,
+                    "legendOpacity": 1,
+                    "legendOrientationThreshold": 100000000,
+                    "name": "Live humidity",
+                    "opacity": 1,
+                    "orientationThreshold": 100000000,
+                    "position": "overlaid",
+                    "queries": [
+                        {
+                            "query": "from(bucket: \"sensordata\")\r\n  |> range(start: -15m)\r\n  |> filter(fn: (r) => r._measurement == \"sensordata\")\r\n  |> filter(fn: (r) => r._field == \"humidity\")\r\n  |> filter(fn: (r) => r.room == \"bathroom\")"
+                        }
+                    ],
+                    "staticLegend": {
+                        "colorizeRows": true,
+                        "opacity": 1,
+                        "orientationThreshold": 100000000,
+                        "widthRatio": 1
+                    },
+                    "width": 4,
+                    "widthRatio": 1,
+                    "xCol": "_time",
+                    "yCol": "_value",
+                    "yPos": 4
+                },
+                {
+                    "colors": [
+                        {
+                            "id": "base",
+                            "name": "laser",
+                            "type": "text",
+                            "hex": "#00C9FF"
+                        }
+                    ],
+                    "decimalPlaces": 1,
+                    "height": 4,
+                    "kind": "Single_Stat",
+                    "name": "Temperature 1h average",
+                    "queries": [
+                        {
+                            "query": "from(bucket: \"sensordata\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"sensordata\")\r\n  |> filter(fn: (r) => r._field == \"temperature\")\r\n  |> filter(fn: (r) => r.room == \"bathroom\")\r\n  |> mean()"
+                        }
+                    ],
+                    "staticLegend": {},
+                    "suffix": " °C",
+                    "width": 4,
+                    "xPos": 4
+                },
+                {
+                    "colors": [
+                        {
+                            "id": "base",
+                            "name": "laser",
+                            "type": "text",
+                            "hex": "#00C9FF"
+                        }
+                    ],
+                    "decimalPlaces": 1,
+                    "height": 4,
+                    "kind": "Single_Stat",
+                    "name": "Humidity 1h avg",
+                    "queries": [
+                        {
+                            "query": "from(bucket: \"sensordata\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"sensordata\")\r\n  |> filter(fn: (r) => r._field == \"humidity\")\r\n  |> filter(fn: (r) => r.room == \"bathroom\")\r\n  |> mean()"
+                        }
+                    ],
+                    "staticLegend": {},
+                    "suffix": " %",
+                    "width": 4,
+                    "xPos": 4,
+                    "yPos": 4
+                },
+                {
+                    "colors": [
+                        {
+                            "id": "base",
+                            "name": "laser",
+                            "type": "text",
+                            "hex": "#00C9FF"
+                        }
+                    ],
+                    "decimalPlaces": 1,
+                    "height": 4,
+                    "kind": "Single_Stat",
+                    "name": "Temperature 24h average",
+                    "queries": [
+                        {
+                            "query": "from(bucket: \"sensordata\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"sensordata\")\r\n  |> filter(fn: (r) => r._field == \"temperature\")\r\n  |> filter(fn: (r) => r.room == \"bathroom\")\r\n  |> mean()"
+                        }
+                    ],
+                    "staticLegend": {},
+                    "suffix": " °C",
+                    "width": 4,
+                    "xPos": 8
+                },
+                {
+                    "colors": [
+                        {
+                            "id": "base",
+                            "name": "laser",
+                            "type": "text",
+                            "hex": "#00C9FF"
+                        }
+                    ],
+                    "decimalPlaces": 1,
+                    "height": 4,
+                    "kind": "Single_Stat",
+                    "name": "Humidity 24h average",
+                    "queries": [
+                        {
+                            "query": "from(bucket: \"sensordata\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"sensordata\")\r\n  |> filter(fn: (r) => r._field == \"humidity\")\r\n  |> filter(fn: (r) => r.room == \"bathroom\")\r\n  |> mean()"
+                        }
+                    ],
+                    "staticLegend": {},
+                    "suffix": " %",
+                    "width": 4,
+                    "xPos": 8,
+                    "yPos": 4
+                }
+            ],
+            "description": "Dashboard for monitoring the temperature and humidity in the bathroom.",
+            "name": "Bathroom sensors"
+        }
+    }
+]

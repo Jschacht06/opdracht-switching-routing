@@ -1,0 +1,83 @@
+[
+  {
+    "apiVersion": "influxdata.com/v2alpha1",
+    "kind": "Dashboard",
+    "metadata": {
+      "name": "compassionate-hugle-bc0001"
+    },
+    "spec": {
+      "charts": [
+        {
+          "colors": [
+            {
+              "id": "base",
+              "name": "laser",
+              "type": "text",
+              "hex": "#00C9FF"
+            }
+          ],
+          "decimalPlaces": 0,
+          "height": 4,
+          "kind": "Single_Stat",
+          "name": "Bathroom error count (1h)",
+          "queries": [
+            {
+              "query": "from(bucket: \"sensordata\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"sensordata\")\r\n  |> filter(fn: (r) => r._field == \"error_count\")\r\n  |> filter(fn: (r) => r.room == \"bathroom\")\r\n  |> sum()"
+            }
+          ],
+          "staticLegend": {},
+          "suffix": " errors",
+          "width": 4
+        },
+        {
+          "colors": [
+            {
+              "id": "base",
+              "name": "laser",
+              "type": "text",
+              "hex": "#00C9FF"
+            }
+          ],
+          "decimalPlaces": 0,
+          "height": 4,
+          "kind": "Single_Stat",
+          "name": "Bedroom error count (1h)",
+          "queries": [
+            {
+              "query": "from(bucket: \"sensordata\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"sensordata\")\r\n  |> filter(fn: (r) => r._field == \"error_count\")\r\n  |> filter(fn: (r) => r.room == \"bedroom\")\r\n  |> sum()"
+            }
+          ],
+          "staticLegend": {},
+          "suffix": " errors",
+          "width": 4,
+          "xPos": 4
+        },
+        {
+          "colors": [
+            {
+              "id": "base",
+              "name": "laser",
+              "type": "text",
+              "hex": "#00C9FF"
+            }
+          ],
+          "decimalPlaces": 0,
+          "height": 4,
+          "kind": "Single_Stat",
+          "name": "Server room error count (1h)",
+          "queries": [
+            {
+              "query": "from(bucket: \"sensordata\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"sensordata\")\r\n  |> filter(fn: (r) => r._field == \"error_count\")\r\n  |> filter(fn: (r) => r.room == \"server_room\")\r\n  |> sum()"
+            }
+          ],
+          "staticLegend": {},
+          "suffix": " errors",
+          "width": 4,
+          "xPos": 8
+        }
+      ],
+      "description": "Dashboard for monitoring error counts in different rooms.",
+      "name": "Sensor errors"
+    }
+  }
+]
