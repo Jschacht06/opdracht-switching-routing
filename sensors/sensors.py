@@ -2,8 +2,8 @@ import json, random, time
 import paho.mqtt.client as mqtt
 
 
-BROKER = "mosquitto"  # moet internal docker ip worden
-PORT = 1883
+BROKER = "mosquitto"  # Can be set to docker IP-address, but using the container's name is better in case the IP changes.
+PORT = 1883 
 TOPIC_BATHROOM = "/home/sensors/bathroom"
 TOPIC_BEDROOM = "/home/sensors/bedroom"
 TOPIC_SERVER_ROOM = "/home/sensors/server_room"
@@ -51,5 +51,5 @@ while True:
     msg_string = json.dumps(msg)
     mqttc.publish(TOPIC_SERVER_ROOM, msg_string)
 
-    # Global wait
-    time.sleep(5)
+    # Global wait between messages
+    time.sleep(5) # Time in seconds

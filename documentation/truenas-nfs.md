@@ -1,90 +1,120 @@
-# TrueNAS
-We installed TrueNAS with the default settings and chose to configure everything in the web UI with the 'truenas_admin' account. At the end of the installation, we chose to shut down instead of rebooting because we then connected the PCI card with the JBODs to the VM and removed the CD drive.
+# TrueNAS and NFS
+TrueNAS is used as shared storage for the Proxmox environment. It creates a storage pool from the JBOD disks and exposes that storage to Proxmox through NFS.
 
-We also created a new account for ourselves. It is still a full admin account, but with a less common name than the 'truenas_admin' account to be safe.
+The TrueNAS web UI is available at:
+- TrueNAS: `10.10.40.104`
 
-The settings for this account are:
-- username: athena
-- allowed access: SMB access, SSH access, and TrueNAS access is set to full admin
-- allow SSH login with password is enabled
-- the home directory is set to `/mnt/jbod-pool/users/athena`
-- all settings that aren't mentioned are set to default
+The Proxmox-side setup is documented in [proxmox.md](proxmox.md).
 
 ---
 
-### JBOD passthrough
-To be able to use the drives from the two JBODs that are connected to two of our nodes, we selected the server's PCI connector for passthrough to the TrueNAS VM.
+### Installation
+TrueNAS was installed with the default settings. During installation we used the default `truenas_admin` account to finish the first configuration in the web UI.
 
-Here's how to add it in Proxmox:
-1. Figure out which PCI card you need to select for passthrough. We used `lspci -nn` to view the connected PCI devices. In the output, we saw that `01:00.0` and `0a:00.0` were RAID controllers. After some searching around, we found out that the card with the JBODs connected was `0a:00.0`.
-2. We're using a cluster, so to add it, click on the cluster and open the Resource Mappings tab near the bottom.
-3. Click on Add and select the device you want to add (`0a:00.0` in this case) from the list.
-4. Give it a name. This is the name for the device. We chose 'JBOD-connections'.
-5. Leave the other settings at their default values and click Create. The PCI card should now show up with your chosen name.
+At the end of the installation, we shut down the VM instead of rebooting it. This gave us time to let Proxmox attach the PCI card with the JBODs before starting TrueNAS again.
 
-To give a VM access to this card, do this:
-1. Select the VM you want to give access to the JBODs and go to the Hardware tab.
-2. Open the Add dropdown menu and select 'PCI Device'.
-3. Keep the default mapped device option and choose the device you just added.
-4. Click Add and start or reboot the VM.
+The PCI passthrough steps are documented in [proxmox.md](proxmox.md).
 
 ---
 
-### TrueNAS pool/vdev creation
-We added 12 HDDs from each JBOD to our storage pool. They are separated into 6 vdevs, all of which are mirrors containing 4 drives each.
+### Admin account
+We also created our own admin account. This account still has full admin rights, but uses a less common username than `truenas_admin`.
 
-Here's how to do it:
-1. Go to the TrueNAS web UI and select the Storage tab in the navigation bar on the left.
-2. Click on Create Pool.
-3. Start by giving the pool a name. We named it 'JBOD-pool'. Then click Next. In the General Information menu, where you choose the name, there is also an option to encrypt all the data in that pool. We left it unchecked because we don't need it.
-4. In the data menu, we chose 'mirror' for the layout option and then clicked on 'Manual Disk Selection' to configure it manually.
-5. Add 6 vdevs using the button in the top right corner.
-6. To make your life a bit easier, filter the disks by size. Our first filter was all 560 GB drives. Then drag 4 of them into the first vdev.
-7. Do this again for the other 2 vdevs.
-8. Change the disk size filter. We then chose the 1 TB drives and dragged 4 of them into each of the remaining vdevs.
-9. When you're done configuring the vdevs, click on Save Selection.
-10. All the other setup options are optional. We skipped most of them except for the spare step.
-11. In the spare menu, we selected 3 1 TB drives as spares. You never know 🙃
-12. Like we mentioned earlier, we left the rest of the options empty and went straight to the review section.
-13. Click on Create Pool and the pool should now be available.
+Account settings:
+- username: `athena`
+- access: SMB access, SSH access, and full TrueNAS admin access
+- password login over SSH: enabled
+- home directory: `/mnt/jbod-pool/users/athena`
+- all other settings: default
 
 ---
 
-### Make the pool usable
-By just creating the pool, you still can't use it to store data yet. First, we have to create a dataset. Then, to be able to use it from any other device, we need to add a network share to it.
+### Storage pool
+We created one TrueNAS storage pool from the JBOD disks.
 
-Here are the steps to create a dataset:
-1. In the web UI, go to the Datasets tab in the navigation bar on the left.
-2. Select the pool you want to use and click on Add Dataset in the top right corner.
-3. Give the dataset a name and keep the preset at 'generic'. We left all the advanced settings at their default values.
+Pool layout:
+- pool name: `JBOD-pool`
+- disks used: 12 HDDs from each JBOD
+- vdev count: 6
+- vdev layout: mirrors
+- drives per mirror vdev: 4
+- spare drives: 3 drives of 1 TB
 
-To add the network share, do this:
-1. Navigate to the Shares tab in the navigation bar on the left.
-2. In the 'UNIX (NFS) Shares' field, click on Add.
-3. Under Path, select the path to the dataset you want to share.
-4. Give the share a description. It's not required, but it can come in handy when you have multiple shares.
-5. Open the advanced options and select a user and group for the 'maproot user' and 'maproot group'. These determine what rights the connection will have. If you select root, the Proxmox root user will be able to act as the TrueNAS root account on that dataset. If you select any other account, you can limit the rights through the ACL settings of the shared dataset.
-6. If you want to limit who can see the share, you can add networks or even specific hosts.
-
-**IMPORTANT: If you add networks, only devices on that network will be able to see the share, and if you add specific hosts, only those hosts will be able to see it.**
+We did not enable encryption because we don't need it for this test setup. Feel free to enable it for your own setup if you'd like.
 
 ---
 
-### Use the TrueNAS share in Proxmox
-You can add the NFS share as storage in Proxmox. In our case, we use that share as storage for our other VMs.
+### Create the pool
+Steps:
+1. Open the TrueNAS web UI.
+2. Go to `Storage`.
+3. Click `Create Pool`.
+4. Enter the pool name. We used `JBOD-pool`.
+5. Leave encryption disabled. (personal choice)
+6. In the data menu, choose `mirror` as the layout.
+7. Click `Manual Disk Selection`.
+8. Add 6 vdevs with the button in the top right corner.
+9. Filter by disk size to make disk selection easier.
+10. Add four 560 GB drives to each of the first three vdevs.
+11. Change the disk size filter.
+12. Add four 1 TB drives to each of the remaining three vdevs.
+13. Click `Save Selection`.
+14. In the spare menu, select three 1 TB drives as spares.
+15. Continue to the review section.
+16. Click `Create Pool`.
 
-Follow these steps to add the share:
-1. In Proxmox, select the cluster and click on Storage.
-2. Click on Add and select NFS.
-3. Give it an ID. This will be the name for the storage, like 'local-zfs'.
-4. Add the IP address of your TrueNAS server to the Server section and put the full share path into the Export box. You can copy the share path from the TrueNAS UI under Shares.
-5. Select what content the share will be used for. In our case, it's the default: disk images.
+After this, the pool should be visible in TrueNAS.
 
-If you want to use this share as a boot drive for a VM or LXC when you create a new one, you need to change the default storage space in the Disks section from 'local-zfs' to the share you just created.
+---
 
-If you want to add this share as external storage to a VM or LXC, follow these steps:
-1. Select your VM or LXC and go to the Hardware tab.
-2. Click on Add and choose Hard Disk.
-3. Select the NFS share in the storage dropdown menu.
+### Dataset
+A pool alone is not enough to expose storage to other systems. We first created a dataset on the pool.
 
-**Note: Please check if the share still has enough storage space before adding it to VMs or LXCs. If they start to use more storage than is available, you won't have a great time =)**
+Steps:
+1. Go to `Datasets`.
+2. Select the pool.
+3. Click `Add Dataset`.
+4. Enter a dataset name.
+5. Keep the preset set to `generic`.
+6. Leave the advanced settings at their default values.
+7. Save the dataset.
+
+---
+
+### NFS share
+The dataset is shared with Proxmox through NFS.
+
+Steps:
+1. Go to `Shares`.
+2. In the `UNIX (NFS) Shares` section, click `Add`.
+3. Under `Path`, select the dataset path.
+4. Add a description for the share.
+5. Open the advanced options.
+6. Select a `maproot user` and `maproot group`.
+7. Optionally add networks or hosts if the share should be limited to specific clients.
+8. Save the share.
+
+The `maproot user` and `maproot group` decide which TrueNAS account the Proxmox root user maps to when it accesses the share. If you select `root`, Proxmox can act as the TrueNAS root account on that dataset. If you select another account, access can be limited through the dataset ACL settings.
+
+**Important:** If you add networks or hosts to the NFS share, only those clients will be able to access it.
+
+After creating the NFS share, add it as Proxmox storage by following [proxmox.md](proxmox.md).
+
+---
+
+### Troubleshooting
+If TrueNAS cannot see the JBOD disks, check:
+- the PCI mapping is attached to the TrueNAS VM in Proxmox
+- the TrueNAS VM was rebooted after adding the PCI device
+- the correct PCI device was mapped in Proxmox
+
+If Proxmox cannot see the NFS export, check:
+- the NFS share is enabled in TrueNAS
+- the TrueNAS IP address is reachable from Proxmox
+- the export path is copied correctly
+- any configured networks or hosts allow the Proxmox nodes
+
+If a VM cannot use the NFS storage, check:
+- the NFS share has enough free space
+- the `maproot user` and `maproot group` have enough permissions on the dataset
+- the Proxmox storage setup in [proxmox.md](proxmox.md)
