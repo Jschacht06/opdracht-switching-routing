@@ -1,12 +1,7 @@
 # TO DO
-- Influxdb dashboard/graph for node red data
 - CI/CD
-- TrueNAS backup VM in case the main VM doesn't work
+- TrueNAS VM migration in case of emergency
 - documentation on debian vm setup
-- documentation on node-red setup
-- documentation on sensor script
-- documentation on influxdb
-- documentation on mqtt broker
 
 # opdracht-switching-routing
 
