@@ -48,7 +48,7 @@
         "usetls": false,
         "tls": "",
         "influxdbVersion": "2.0",
-        "url": "http://influxdb:8086",
+        "url": "${INFLUXDB_URL}",
         "timeout": 10,
         "rejectUnauthorized": true
     },
@@ -159,7 +159,7 @@
         "type": "function",
         "z": "f6f2187d.f17ca8",
         "name": "bad value check",
-        "func": "let t = msg.payload.temperature;\nlet h = msg.payload.humidity;\n\nlet error = false;\n\nif (msg.topic === \"/home/sensors/bathroom\") {\n    if (t < 16.5 || t > 29.5 || h < 50 || h > 85) {\n        error = true;\n    }\n}\n\nif (msg.topic === \"/home/sensors/bedroom\") {\n    if (t < 9.0 || t > 24.5 || h < 40 || h > 55) {\n        error = true;\n    }\n}\n\nif (msg.topic === \"/home/sensors/server_room\") {\n    if (t < 22 || t > 47 || h < 30 || h > 45) {\n        error = true;\n    }\n}\n\nmsg.payload.error = error;\n\nreturn msg;",
+        "func": "let t = msg.payload.temperature;\nlet h = msg.payload.humidity;\nlet room = msg.topic.split(\"/\").pop();\n\nlet error = false;\n\n// Validate per room\nif (msg.topic === \"/home/sensors/bathroom\") {\n    if (t < 16.5 || t > 29.5 || h < 50 || h > 85) {\n        error = true;\n    }\n}\n\nif (msg.topic === \"/home/sensors/bedroom\") {\n    if (t < 9.0 || t > 24.5 || h < 40 || h > 55) {\n        error = true;\n    }\n}\n\nif (msg.topic === \"/home/sensors/server_room\") {\n    if (t < 22 || t > 47 || h < 30 || h > 45) {\n        error = true;\n    }\n}\n\n// Get previously stored good values for this room\nlet lastGood = flow.get(\"lastGood_\" + room);\n\n// If current reading is valid, save it as the new good reading\nif (!error) {\n    flow.set(\"lastGood_\" + room, {\n        temperature: t,\n        humidity: h\n    });\n} else {\n    // If current reading is invalid, reuse the previous good value\n    if (lastGood) {\n        msg.payload.temperature = lastGood.temperature;\n        msg.payload.humidity = lastGood.humidity;\n    }\n}\n\nmsg.payload.error = error;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -208,8 +208,8 @@
         "database": "database",
         "precisionV18FluxV20": "ms",
         "retentionPolicyV18Flux": "",
-        "org": "Vives",
-        "bucket": "sensordata",
+        "org": "${INFLUXDB_ORG}",
+        "bucket": "${INFLUXDB_BUCKET}",
         "x": 1190,
         "y": 340,
         "wires": []
