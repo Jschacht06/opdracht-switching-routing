@@ -54,6 +54,30 @@ After the reboot, TrueNAS should be able to see the disks from the JBODs.
 
 ---
 
+### Migration and HA warning for mapped hardware
+The TrueNAS VM uses a mapped PCI device. This is not the same as a normal VM that only uses shared storage and virtual network devices. The VM depends on physical hardware that exists on a specific Proxmox node.
+
+Because of this, do not live migrate the TrueNAS VM while it is running. A running migration can fail because the target node may not have the same PCI device, or the cluster mapping may not point to an equivalent device on that node. Resource mappings can help with offline moves between nodes that have equivalent hardware, but they do not make this JBOD PCI passthrough setup safe for live migration.
+
+For the JBOD controller, treat the hardware as node-local and move the VM only with a planned stop/start procedure.
+
+Safe procedure for moving the TrueNAS VM:
+1. Check that the target node is physically connected to the JBODs.
+2. Check that the `JBOD-connections` resource mapping has an entry for the target node.
+3. Shut down the TrueNAS VM cleanly.
+4. Move or start the VM on the target node.
+5. Confirm in TrueNAS that the disks and pool are visible before starting dependent VMs.
+
+Do not add the TrueNAS VM to Proxmox High Availability unless this behavior has been tested. HA does not make missing or wrong hardware mappings valid, and it does not make live migration safe for this VM. If the required PCI mapping is missing or wrong on the node HA chooses, the VM can fail to start or end up locked by an HA task.
+
+If HA is used anyway:
+- restrict the HA group to nodes that have a valid JBOD PCI mapping
+- test failover during a maintenance window
+- prefer HA relocation with the VM stopped instead of running migration
+- remove the VM from HA before changing its PCI mapping or moving the JBOD hardware
+
+---
+
 ### Add the NFS share
 The NFS share from TrueNAS can be added as storage in Proxmox. In our setup, this share is used as storage for VM disks.
 
@@ -105,3 +129,9 @@ If a VM cannot use the NFS storage, check:
 - the Proxmox storage entry allows `disk images`
 - the NFS share has enough free space
 - the TrueNAS dataset permissions allow the mapped NFS user
+
+If the TrueNAS VM is stuck or locked after an HA or migration attempt, check:
+- whether the VM is still configured as an HA resource
+- whether HA tried to move it to a node without a valid `JBOD-connections` mapping
+- whether a migration task is still running or failed in the Proxmox task log
+- whether the VM needs to be removed from HA before clearing the lock and starting it manually
