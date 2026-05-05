@@ -13,7 +13,7 @@ The CI/CD deployment procedure is documented in ``documentation/CICD.md``.
 
 ## web-ui
 
-- zues: ``10.10.40.101:8006``
+- zeus: ``10.10.40.101:8006``
 - artemis: ``10.10.40.102:8006``
 - luc: ``10.10.40.103:8006``
 - truenas: ``10.10.40.104``
