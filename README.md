@@ -1,11 +1,14 @@
 # TO DO
-- CI/CD
 - TrueNAS VM migration in case of emergency
 - documentation on debian vm setup
 
 # opdracht-switching-routing
 
-Command to start everything: ``docker-compose up --build``
+Command to start everything manually: ``docker compose up --build``
+
+Command to redeploy the full stack: ``./deploy.sh``
+
+The CI/CD deployment procedure is documented in ``documentation/CICD.md``.
 
 
 ## web-ui
