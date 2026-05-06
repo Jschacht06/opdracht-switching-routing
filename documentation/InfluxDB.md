@@ -159,3 +159,15 @@ If Node-RED cannot write data, check:
 - the admin token in [.env](../.env) is correct
 - the bucket and organization match the values used by Node-RED
 - `INFLUXDB_URL` is reachable from inside Docker as `http://influxdb:8086`
+
+If Node-RED logs `HttpError: unauthorized access`, the token in [.env](../.env) probably does not match the token stored inside the existing InfluxDB data directory. The `DOCKER_INFLUXDB_INIT_*` values are only used when InfluxDB is initialized for the first time.
+
+For a fresh test environment, reset InfluxDB and let it initialize again from [.env](../.env):
+
+```bash
+docker compose down
+sudo rm -rf influxdb/data influxdb/config
+docker compose up -d
+```
+
+Only do this when you do not need the existing InfluxDB data, because it deletes the local database state.

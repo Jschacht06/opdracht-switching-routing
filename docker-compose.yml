@@ -50,12 +50,30 @@ services:
     image: nodered/node-red:4.1.8-22
     container_name: node-red-package-installer
     user: root
+    environment:
+      INFLUXDB_ADMIN_TOKEN: ${INFLUXDB_ADMIN_TOKEN}
     volumes:
       - ./node-red-data:/data
     entrypoint:
       - /bin/sh
       - -c
-      - npm ci --omit=dev --prefix /data && mkdir -p /data/lib && chown -R 1000:1000 /data
+      - >
+        npm ci --omit=dev --prefix /data &&
+        mkdir -p /data/lib &&
+        node -e '
+        const fs = require("fs");
+        const token = process.env.INFLUXDB_ADMIN_TOKEN;
+        if (!token) throw new Error("INFLUXDB_ADMIN_TOKEN is missing");
+        const flows = JSON.parse(fs.readFileSync("/data/flows.json", "utf8"));
+        const credentials = {};
+        for (const node of flows) {
+          if (node.type === "influxdb" && node.influxdbVersion === "2.0") {
+            credentials[node.id] = { token };
+          }
+        }
+        fs.writeFileSync("/data/flows_cred.json", JSON.stringify(credentials, null, 4));
+        ' &&
+        chown -R 1000:1000 /data
     restart: "no"
 
   influxdb:

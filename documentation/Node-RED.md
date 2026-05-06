@@ -20,7 +20,7 @@ Important files:
 - [node-red-data/package.json](../node-red-data/package.json): lists the extra Node-RED palette packages we need.
 - [node-red-data/package-lock.json](../node-red-data/package-lock.json): locks the installed package versions.
 
-Both the `nodered` service and the `node-red-package-installer` service use the official `nodered/node-red:4.1.8-22` image. The installer runs `npm ci --omit=dev --prefix /data`, which installs the packages from [node-red-data/package.json](../node-red-data/package.json) into the mounted `/data` folder. It also creates `/data/lib` and gives ownership of `/data` back to the Node-RED user. The most important dependency is `node-red-contrib-influxdb`, which adds the InfluxDB output nodes used in the flow.
+Both the `nodered` service and the `node-red-package-installer` service use the official `nodered/node-red:4.1.8-22` image. The installer runs `npm ci --omit=dev --prefix /data`, which installs the packages from [node-red-data/package.json](../node-red-data/package.json) into the mounted `/data` folder. It also creates `/data/lib`, generates the local `flows_cred.json` file with the InfluxDB token from `.env`, and gives ownership of `/data` back to the Node-RED user. The most important dependency is `node-red-contrib-influxdb`, which adds the InfluxDB output nodes used in the flow.
 
 ---
 
