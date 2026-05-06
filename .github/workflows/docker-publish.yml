@@ -48,11 +48,11 @@ jobs:
     steps:
       - name: Update repository on VM
         run: |
-          cd /opt/opdracht-switching-routing
+          cd ~/opdracht-switching-routing
           git pull --ff-only origin main
 
       - name: Deploy containers
         run: |
-          cd /opt/opdracht-switching-routing
+          cd ~/opdracht-switching-routing
           chmod +x deploy.sh
           ./deploy.sh
