@@ -98,13 +98,13 @@ It uses:
 - script: [influxdb/scripts/apply-templates.sh](../influxdb/scripts/apply-templates.sh)
 - templates folder: [influxdb/templates](../influxdb/templates)
 
-The script waits until InfluxDB responds to `influx ping`, then runs:
+The script waits until InfluxDB responds to `influx ping`, then retries this command until InfluxDB accepts it:
 
 ```bash
 influx apply --host http://influxdb:8086 --org "$INFLUXDB_ORG" --token "$INFLUXDB_ADMIN_TOKEN" --force yes --file /templates
 ```
 
-The importer has `restart: "no"`, so it runs once and then stops. This is expected.
+The importer has `restart: "no"`, so it runs once and then stops. This is expected. If Docker starts slowly, the script waits and retries instead of exiting on the first failed import attempt.
 
 ---
 
