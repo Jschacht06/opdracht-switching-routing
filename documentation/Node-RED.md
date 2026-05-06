@@ -5,6 +5,8 @@ The web UI is available at:
 - local development: `http://localhost:1880`
 - Docker service name: `nodered`
 
+Do not open the Docker-internal `172.x.x.x` container address from the host machine. Use `http://localhost:1880` on the machine running Docker, or `http://<vm-ip>:1880` when connecting to a Debian VM from another computer.
+
 The container is started through [docker-compose.yml](../docker-compose.yml) as the `nodered` service. It depends on `mosquitto`, `influxdb`, and the one-shot `node-red-package-installer` service. The installer makes sure the required Node-RED palette packages are present before Node-RED starts.
 
 ---
@@ -18,7 +20,7 @@ Important files:
 - [node-red-data/package.json](../node-red-data/package.json): lists the extra Node-RED palette packages we need.
 - [node-red-data/package-lock.json](../node-red-data/package-lock.json): locks the installed package versions.
 
-Both the `nodered` service and the `node-red-package-installer` service use the official `nodered/node-red:4.1.8-22` image. The installer runs `npm ci --omit=dev --prefix /data`, which installs the packages from [node-red-data/package.json](../node-red-data/package.json) into the mounted `/data` folder. The most important dependency is `node-red-contrib-influxdb`, which adds the InfluxDB output nodes used in the flow.
+Both the `nodered` service and the `node-red-package-installer` service use the official `nodered/node-red:4.1.8-22` image. The installer runs `npm ci --omit=dev --prefix /data`, which installs the packages from [node-red-data/package.json](../node-red-data/package.json) into the mounted `/data` folder. It also creates `/data/lib` and gives ownership of `/data` back to the Node-RED user. The most important dependency is `node-red-contrib-influxdb`, which adds the InfluxDB output nodes used in the flow.
 
 ---
 
@@ -131,6 +133,26 @@ docker compose up -d --force-recreate node-red-package-installer nodered
 
 ### Troubleshooting
 If Node-RED does not receive MQTT data, check if the MQTT broker is running and if the broker host is still set to `mosquitto`. This is the Docker Compose service name and works inside the Docker network.
+
+If Node-RED exits with `EACCES: permission denied, mkdir '/data/lib'`, recreate the package installer and Node-RED services:
+
+```bash
+docker compose up -d --force-recreate node-red-package-installer nodered
+```
+
+The package installer fixes the ownership of the mounted [node-red-data](../node-red-data) folder for the Node-RED container.
+
+If the browser shows `connection refused` for a `172.x.x.x` address, use the published port instead:
+
+```text
+http://localhost:1880
+```
+
+When Docker runs on a VM, replace `localhost` with the VM address, for example:
+
+```text
+http://<debian-vm-ip>:1880
+```
 
 If Node-RED receives MQTT data but InfluxDB stays empty, check for these things:
 - the InfluxDB container is healthy

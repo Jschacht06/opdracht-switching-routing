@@ -52,8 +52,10 @@ services:
     user: root
     volumes:
       - ./node-red-data:/data
-    entrypoint: ["npm"]
-    command: ["ci", "--omit=dev", "--prefix", "/data"]
+    entrypoint:
+      - /bin/sh
+      - -c
+      - npm ci --omit=dev --prefix /data && mkdir -p /data/lib && chown -R 1000:1000 /data
     restart: "no"
 
   influxdb:
