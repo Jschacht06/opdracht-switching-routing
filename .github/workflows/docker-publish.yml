@@ -42,39 +42,17 @@ jobs:
             ghcr.io/${{ steps.vars.outputs.image_owner }}/opdracht-switching-routing-sensors:${{ github.sha }}
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-and-push
 
     steps:
-      - name: Prepare SSH key
+      - name: Update repository on VM
         run: |
-          set -e
-          mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.VM_SSH_KEY }}" | tr -d '\r' > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
+          cd /opt/opdracht-switching-routing
+          git pull --ff-only origin main
 
-      - name: Test VM SSH port
+      - name: Deploy containers
         run: |
-          set -e
-          echo "Checking if VM port 22 is reachable..."
-          nc -vz "${{ secrets.VM_HOST }}" 22
-
-      - name: Add VM to known hosts
-        run: |
-          set -e
-          ssh-keyscan -H "${{ secrets.VM_HOST }}" >> ~/.ssh/known_hosts
-
-      - name: Test SSH login
-        run: |
-          set -e
-          ssh -i ~/.ssh/deploy_key "${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}" "echo SSH login works"
-
-      - name: Update repo and deploy
-        run: |
-          set -e
-          ssh -i ~/.ssh/deploy_key "${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}" << 'EOF'
-            cd /opt/opdracht-switching-routing
-            git pull --ff-only origin main
-            chmod +x deploy.sh
-            ./deploy.sh
-          EOF
+          cd /opt/opdracht-switching-routing
+          chmod +x deploy.sh
+          ./deploy.sh
