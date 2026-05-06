@@ -11,10 +11,7 @@ services:
       - ./mqtt-broker/data:/mosquitto/data
       - ./mqtt-broker/log:/mosquitto/log
   sensors:
-    build:
-      context: ./sensors
-      dockerfile: Dockerfile
-    image: sensors
+    image: ghcr.io/jschacht06/opdracht-switching-routing-sensors:latest
     container_name: sensors-simulator
     restart: unless-stopped
     depends_on:
