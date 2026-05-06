@@ -3,7 +3,7 @@
     "apiVersion": "influxdata.com/v2alpha1",
     "kind": "Dashboard",
     "metadata": {
-      "name": "bedroom-sensors-363001"
+      "name": "bedroom-sensor-dashboard"
     },
     "spec": {
       "charts": [

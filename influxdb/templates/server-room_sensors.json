@@ -3,7 +3,7 @@
     "apiVersion": "influxdata.com/v2alpha1",
     "kind": "Dashboard",
     "metadata": {
-      "name": "server-room-sensors-363001"
+      "name": "server-room-sensor-dashboard"
     },
     "spec": {
       "charts": [
