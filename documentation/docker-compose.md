@@ -44,7 +44,7 @@ Docker Compose starts services based on their `depends_on` rules.
 - `sensors`
 - `nodered`
 
-`influxdb` starts before:
+`influxdb` must become healthy before:
 - `nodered`
 - `influxdb-template-importer`
 
@@ -160,7 +160,7 @@ docker compose up -d --force-recreate node-red-package-installer nodered
 
 The `influxdb-template-importer` service applies dashboard templates from [influxdb/templates](../influxdb/templates).
 
-It runs [influxdb/scripts/apply-templates.sh](../influxdb/scripts/apply-templates.sh), waits until InfluxDB responds, then applies the template files.
+It runs [influxdb/scripts/apply-templates.sh](../influxdb/scripts/apply-templates.sh), waits until InfluxDB responds, then retries the template import until InfluxDB accepts it.
 
 Re-run the importer after changing templates:
 
