@@ -8,6 +8,8 @@ Command to start everything manually: ``docker compose up --build``
 
 Command to redeploy the full stack: ``./deploy.sh``
 
+The Docker Compose stack is documented in ``documentation/docker-compose.md``.
+
 The CI/CD deployment procedure is documented in ``documentation/CICD.md``.
 
 JBOD cabling is documented in ``documentation/jbod.md``.
