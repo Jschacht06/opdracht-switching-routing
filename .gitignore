@@ -1,5 +1,5 @@
-# All .env files
-.env
+# env is pushed on purpose
+# .env
 
 # MQTT broker data/ logs
 mqtt-broker/data
