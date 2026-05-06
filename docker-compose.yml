@@ -29,11 +29,9 @@ services:
     ports:
       - 9443:9443
   nodered:
+    image: nodered/node-red:4.1.8-22
     container_name: node-red
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: node-red-data/Dockerfile
     ports:
       - "1880:1880"
     volumes:
@@ -44,8 +42,23 @@ services:
       INFLUXDB_ADMIN_TOKEN: ${INFLUXDB_ADMIN_TOKEN}
       INFLUXDB_URL: ${INFLUXDB_URL}
     depends_on:
-      - mosquitto
-      - influxdb
+      mosquitto:
+        condition: service_started
+      influxdb:
+        condition: service_started
+      node-red-package-installer:
+        condition: service_completed_successfully
+
+  node-red-package-installer:
+    image: nodered/node-red:4.1.8-22
+    container_name: node-red-package-installer
+    user: root
+    volumes:
+      - ./node-red-data:/data
+    entrypoint: ["npm"]
+    command: ["ci", "--omit=dev", "--prefix", "/data"]
+    restart: "no"
+
   influxdb:
     image: influxdb:2.7
     container_name: influxdb
@@ -87,8 +100,6 @@ services:
 volumes:
   portainer_data:
     name: portainer_data
-  node-red-data:
-    name: node_red_data
 
 
 networks:

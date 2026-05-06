@@ -5,7 +5,7 @@ The web UI is available at:
 - local development: `http://localhost:1880`
 - Docker service name: `nodered`
 
-The container is started through [docker-compose.yml](../docker-compose.yml) as the `nodered` service. It depends on both `mosquitto` and `influxdb`, because the flow needs MQTT input and an InfluxDB output.
+The container is started through [docker-compose.yml](../docker-compose.yml) as the `nodered` service. It depends on `mosquitto`, `influxdb`, and the one-shot `node-red-package-installer` service. The installer makes sure the required Node-RED palette packages are present before Node-RED starts.
 
 ---
 
@@ -15,10 +15,10 @@ The Node-RED configuration lives in the [node-red-data](../node-red-data) folder
 Important files:
 - [node-red-data/flows.json](../node-red-data/flows.json): contains the actual Node-RED flow.
 - [node-red-data/settings.js](../node-red-data/settings.js): contains the Node-RED runtime settings.
-- [node-red-data/package.json](../node-red-data/package.json): lists the extra Node-RED packages we need.
-- [node-red-data/Dockerfile](../node-red-data/Dockerfile): builds our custom Node-RED image and installs the required packages.
+- [node-red-data/package.json](../node-red-data/package.json): lists the extra Node-RED palette packages we need.
+- [node-red-data/package-lock.json](../node-red-data/package-lock.json): locks the installed package versions.
 
-The Dockerfile starts from the official `nodered/node-red` image and installs the dependencies from [node-red-data/package.json](../node-red-data/package.json). The most important dependency is `node-red-contrib-influxdb`, which adds the InfluxDB output nodes used in the flow.
+Both the `nodered` service and the `node-red-package-installer` service use the official `nodered/node-red:4.1.8-22` image. The installer runs `npm ci --omit=dev --prefix /data`, which installs the packages from [node-red-data/package.json](../node-red-data/package.json) into the mounted `/data` folder. The most important dependency is `node-red-contrib-influxdb`, which adds the InfluxDB output nodes used in the flow.
 
 ---
 
@@ -121,10 +121,10 @@ This is useful when:
 ### Deploying changes
 If you change the flow in the Node-RED web UI, click `Deploy` in the top right corner. The flow is stored in [node-red-data/flows.json](../node-red-data/flows.json), because the [node-red-data](../node-red-data) folder is mounted into the container as `/data`.
 
-If you change dependencies in [node-red-data/package.json](../node-red-data/package.json), rebuild the container:
+If you change dependencies in [node-red-data/package.json](../node-red-data/package.json), update [node-red-data/package-lock.json](../node-red-data/package-lock.json) and recreate the services:
 
 ```bash
-docker-compose up --build
+docker compose up -d --force-recreate node-red-package-installer nodered
 ```
 
 ---
