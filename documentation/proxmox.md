@@ -7,6 +7,8 @@ The Proxmox web UIs are listed in the main [README.md](../README.md).
 
 The TrueNAS-side setup is documented in [truenas-nfs.md](truenas-nfs.md).
 
+The physical JBOD cabling is documented in [jbod.md](jbod.md).
+
 ---
 
 ### JBOD passthrough
@@ -36,6 +38,26 @@ Steps:
 8. Click `Create`.
 
 After this, the mapped PCI device should be available to assign to a VM.
+
+---
+
+### Add the same PCI mapping on another node
+For failover or a planned move to another Proxmox node, the same Datacenter-level resource mapping needs an entry for that node as well. Do not create a second mapping with a different name. Add another entry under the existing `JBOD-connections` mapping.
+
+Before doing this, check that the other Proxmox node is physically connected to both JBODs. The cabling is documented in [jbod.md](jbod.md).
+
+Steps:
+1. Open the Proxmox web UI.
+2. Select `Datacenter`.
+3. Open the `Resource Mappings` tab.
+4. Select the existing `JBOD-connections` mapping.
+5. In the `Actions` column, click the `+` button.
+6. Select the node you want to add to this mapping.
+7. Select the PCI device connected to the JBODs on that node.
+8. Look for the right PCI device again (same process as the first mapping).
+9. Click `Create`.
+
+After this, the same `JBOD-connections` mapping name should work on both Proxmox nodes that have a valid JBOD PCI connection.
 
 ---
 

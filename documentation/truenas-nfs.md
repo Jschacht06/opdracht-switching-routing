@@ -6,6 +6,8 @@ The TrueNAS web UI is available at:
 
 The Proxmox-side setup is documented in [proxmox.md](proxmox.md).
 
+The physical JBOD cabling is documented in [jbod.md](jbod.md).
+
 ---
 
 ### Installation

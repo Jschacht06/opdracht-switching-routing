@@ -10,6 +10,8 @@ Command to redeploy the full stack: ``./deploy.sh``
 
 The CI/CD deployment procedure is documented in ``documentation/CICD.md``.
 
+JBOD cabling is documented in ``documentation/jbod.md``.
+
 
 ## web-ui
 
