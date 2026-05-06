@@ -69,7 +69,7 @@ The intended design was:
 
 1. Artemis and Luc are both connected to the two JBODs.
 2. Artemis runs the TrueNAS VM by default.
-3. The JBODs are passed through to TrueNAS through the PCI adapter on Artemis.
+3. The JBODs are passed through to TrueNAS through the PCI adapters on both Artemis and Luc under the same name on datacenter level.
 4. If Artemis goes down, Luc starts the same TrueNAS VM with its own PCI connection to the JBODs.
 5. The VM disk is stored on `local-zfs` and replicated from Artemis to Luc every minute.
 
@@ -120,8 +120,3 @@ Redeploy:
 ```bash
 ./deploy.sh
 ```
-
-## Open Work
-
-- Document the Debian VM setup.
-- Revisit the TrueNAS migration/failover plan after Luc is repaired or replaced with hardware that can connect to the JBODs.
