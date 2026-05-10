@@ -8,14 +8,17 @@ Daarnaast heb ik ook veel bijgeleerd over Proxmox. Ik had al interesse in virtua
 Wat ik vooral meeneem uit dit project, is dat het opzetten van een infrastructuur niet alleen draait om losse onderdelen laten werken, maar vooral om de samenhang tussen die onderdelen. Over het algemeen vond ik dit een leerrijk project waarin ik mijn bestaande kennis verder heb kunnen uitbouwen. Vooral de combinatie van Proxmox, TrueNAS, Docker, Node-RED en InfluxDB maakte het interessant, omdat het project daardoor dichter aanleunde bij een echte infrastructuuromgeving.
 
 ## Juha
-Reflectie Juha
+Dit was een leuk project, door dit te maken heb ik over alle onderdelen veel meer bijgeleerd. Ik heb het meest bijgeleerd op vlak van CI-CD want hier wist ik niks vanaf op voorhand. Ik ben ook enorm blij dat ik nu een basis heb van hoe dit werkt want ik zal dit later ook vaak toepassen op mijn projecten.
+
+De extra opdracht heeft me ook veel bijgeleerd over proxmox/truenas op een iets grotere schaal dan gewoon een thuisinstallatie.
+
 
 ## Takenverdeling
 ### Arthur:
 - Docker compose
 - Node-Red setup volledig (+ flow automatisch importeren)
 - InfluxDB setup volledig (+ dashboards automatisch importeren)
-- Sensor script
+- Sensor script uitbreiding / extra sensoren
 
 - JBOD passthrough in Proxmox (met hulp van Juha)
 - TrueNAS VM setup
@@ -25,12 +28,13 @@ Reflectie Juha
 
 ### Juha:
 - Docker compose
-- CICD volledig
+- Basis sensor script (mqtt connectie en 1 sensor)
 - Dockerfile voor sensor script
 - MQTT-broker setup volledig
 - Portainer setup volledig
+- CICD volledig
 
 - Proxmox setup
-- Debian VM die werkt met CICD
+- Debian LXC die werkt met CICD (self hosted runner en workflow die automatisch pulled en rebuild)
 
 - Documentatie (CICD)
