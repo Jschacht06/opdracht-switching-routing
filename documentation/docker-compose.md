@@ -8,6 +8,12 @@ Start the full stack:
 docker compose up -d
 ```
 
+Pull the newest published images first:
+
+```bash
+docker compose pull
+```
+
 Show logs:
 
 ```bash
@@ -33,6 +39,8 @@ docker compose down
 | `influxdb` | `influxdb` | Time-series database for sensor data. |
 | `influxdb-template-importer` | `influxdb-template-importer` | One-shot setup service that imports InfluxDB dashboards. |
 | `portainer` | `portainer` | Web UI for managing Docker. |
+
+The `sensors` service uses `ghcr.io/jschacht06/opdracht-switching-routing-sensors:latest`, which is built from [sensors/Dockerfile](../sensors/Dockerfile) by the GitHub Actions workflow. Docker Compose pulls this image instead of building it locally during deployment.
 
 ---
 

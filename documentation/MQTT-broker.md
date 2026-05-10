@@ -125,7 +125,8 @@ From outside Docker, use:
 Start the stack with:
 
 ```bash
-docker-compose up --build
+docker compose pull
+docker compose up -d
 ```
 
 Check the broker logs with:

@@ -14,10 +14,11 @@ The infrastructure side documents the Proxmox nodes, the TrueNAS VM, NFS storage
 
 ## Quick Start
 
-Start or rebuild the Docker stack manually:
+Pull the published images and start the Docker stack manually:
 
 ```bash
-docker compose up --build
+docker compose pull
+docker compose up -d
 ```
 
 Deploy the full stack with the deployment script:
@@ -26,7 +27,7 @@ Deploy the full stack with the deployment script:
 ./deploy.sh
 ```
 
-The Docker Compose stack is documented in [documentation/docker-compose.md](documentation/docker-compose.md).
+The CI/CD workflow builds the custom `sensors` image and publishes it to GitHub Container Registry. Docker Compose pulls that image during deployment. The stack is documented in [documentation/docker-compose.md](documentation/docker-compose.md).
 
 ## Services
 
@@ -97,10 +98,10 @@ Start the stack:
 docker compose up -d
 ```
 
-Start the stack and rebuild images:
+Pull latest images:
 
 ```bash
-docker compose up --build
+docker compose pull
 ```
 
 View logs:

@@ -3,7 +3,7 @@ The sensor simulation script creates fake sensor data for three rooms and publis
 
 The script is located at [sensors/sensors.py](../sensors/sensors.py).
 
-It runs in the `sensors-simulator` container, which is built from [sensors/Dockerfile](../sensors/Dockerfile).
+It runs in the `sensors-simulator` container. The image is defined by [sensors/Dockerfile](../sensors/Dockerfile), built by the CI/CD workflow, published to GitHub Container Registry, and then pulled by Docker Compose.
 
 ---
 
@@ -11,7 +11,8 @@ It runs in the `sensors-simulator` container, which is built from [sensors/Docke
 The `sensors` service is defined in [docker-compose.yml](../docker-compose.yml).
 
 It:
-- builds from the `sensors` folder
+- uses the image `ghcr.io/jschacht06/opdracht-switching-routing-sensors:latest`
+- is built from the `sensors` folder by GitHub Actions
 - uses the container name `sensors-simulator`
 - restarts automatically unless stopped
 - depends on the `mosquitto` service
@@ -127,7 +128,8 @@ This means each room gets a new MQTT message about every 5 seconds.
 Start the full stack with:
 
 ```bash
-docker-compose up --build
+docker compose pull
+docker compose up -d
 ```
 
 To check if the simulator is running:
@@ -155,6 +157,8 @@ To add another room:
 To change how often data is sent, change the value in `time.sleep(5)`.
 
 To change how often abnormal values are created, change the `chance` value in the `error()` function call.
+
+After changing the script, push the change to the `main` branch so GitHub Actions builds and publishes a new `sensors` image. The deployment VM will pull that image through Docker Compose.
 
 ---
 
